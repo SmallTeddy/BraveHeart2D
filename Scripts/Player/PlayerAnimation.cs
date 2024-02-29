@@ -22,6 +22,9 @@ public class PlayerAnimation : MonoBehaviour
         setAnimation();
     }
 
+    /// <summary>
+    /// 设置动画
+    /// </summary>
     public void setAnimation()
     {
         anim.SetFloat("velocityX", Mathf.Abs(rb.velocity.x));

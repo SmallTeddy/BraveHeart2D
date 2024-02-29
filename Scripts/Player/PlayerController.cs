@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 inputDirection;
     [Header("基础参数")] public float speed;
 
-    public float jumpForce;
+    public float jumpForce; // 跳跃力度
 
     private void Awake()
     {
@@ -24,24 +24,33 @@ public class PlayerController : MonoBehaviour
         inputControl.Gameplay.Jump.started += Jump;
     }
 
-    // 被启动时
+    /// <summary>
+    /// 被启动时
+    /// </summary>
     private void OnEnable()
     {
         inputControl.Enable();
     }
 
-    // 更新时
+    /// <summary>
+    /// 更新时
+    /// </summary>
     private void Update()
     {
         inputDirection = inputControl.Gameplay.Move.ReadValue<Vector2>();
     }
 
-    // 固定更新的值，一般处理跟物理有关的数据
+    /// <summary>
+    /// 固定更新的值，一般处理跟物理有关的数据
+    /// </summary>
     private void FixedUpdate()
     {
         Move();
     }
 
+    /// <summary>
+    /// 人物移动
+    /// </summary>
     public void Move()
     {
         // 人物左右移动
@@ -55,13 +64,19 @@ public class PlayerController : MonoBehaviour
         transform.localScale = new Vector3(faceDirection, 1, 1);
     }
 
+    /// <summary>
+    /// 跳
+    /// </summary>
+    /// <param name="obj"></param>
     private void Jump(InputAction.CallbackContext obj)
     {
-        if(physicsCheck.isGround)
-         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+        if (physicsCheck.isGround)
+            rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
-    // 被关闭时
+    /// <summary>
+    /// 被关闭时
+    /// </summary>
     private void OnDisable()
     {
         inputControl.Disable();
