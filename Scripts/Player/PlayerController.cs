@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     [Header("基础参数")] public float speed;
 
     public float jumpForce; // 跳跃力度
+    public float hurtForce; // 反弹力度
+    public bool isHurt; // 是否受伤
+    public bool isDead; // 是否死亡
 
     private void Awake()
     {
@@ -45,7 +48,8 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
-        Move();
+        if (!isHurt)
+            Move();
     }
 
     /// <summary>
@@ -80,5 +84,24 @@ public class PlayerController : MonoBehaviour
     private void OnDisable()
     {
         inputControl.Disable();
+    }
+
+    /// <summary>
+    /// 受伤
+    /// </summary>
+    /// <param name="attacker"></param>
+    public void GetHurt(Transform attacker)
+    {
+        isHurt = true;
+        rb.velocity = Vector2.zero;
+        rb.AddForce((transform.position - attacker.position) * hurtForce, ForceMode2D.Impulse);
+    }
+    /// <summary>
+    /// 死亡
+    /// </summary>
+    public void PlayerDead()
+    {
+        isDead = true;
+        inputControl.Gameplay.Disable();
     }
 }

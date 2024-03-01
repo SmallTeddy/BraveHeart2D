@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class Character : MonoBehaviour
     public float invulnerableDuration; // 无敌时间
     private float invulnerableCounter; // 无敌计时器
     public bool invulnerable; // 是否处于无敌状态
+
+    [Header("事件")]
+    public UnityEvent<Transform> onTakeDamage; // 受伤事件
+    public UnityEvent onDie; // 死亡事件
+
 
     public void Start()
     {
@@ -42,18 +48,23 @@ public class Character : MonoBehaviour
 
         if (currentHealth - attacker.damage > 0)
         {
+            // 减少生命值
             currentHealth -= attacker.damage;
+            // 触发无敌
             TriggerInvulnerable();
+            // 执行受伤
+            onTakeDamage?.Invoke(attacker.transform);
         }
         else
         {
             currentHealth = 0;
             // 触发死亡
+            onDie?.Invoke();
         }
     }
 
     /// <summary>
-    /// 处罚无敌
+    /// 触发无敌
     /// </summary>
     private void TriggerInvulnerable()
     {
